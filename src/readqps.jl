@@ -72,7 +72,7 @@ mutable struct QPSData
 
   lcon::Vector{Float64}            # constraints lower bounds
   ucon::Vector{Float64}            # constraints upper bounds
-  rngcon::Dict{String, Int}        # range constraints dictionary
+  rngcon::Vector{Tuple{Int64, Float64}}        # range constraints dictionary
 
   lvar::Vector{Float64}            # variables lower bounds
   uvar::Vector{Float64}            # variables upper bounds
@@ -112,7 +112,7 @@ mutable struct QPSData
     Int[],
     Int[],
     Float64[],
-    Dict{String, Float64}(),
+    Tuple{Int64, Float64}[],
     Float64[],
     Float64[],
     Float64[],
@@ -621,6 +621,7 @@ function read_ranges_line!(qps::QPSData, card::MPSCard)
   rowname = card.f2
   val = parse(Float64, card.f3)
   row = get(qps.conindices, rowname, -2)
+  push!(qps.rngcon,(row,val))
   if row == 0 || row == -1
     # Objective row
     error("Encountered objective row $rowname in RANGES section")
@@ -647,6 +648,7 @@ function read_ranges_line!(qps::QPSData, card::MPSCard)
   rowname = card.f4
   val = parse(Float64, card.f5)
   row = get(qps.conindices, rowname, -2)
+  push!(qps.rngcon,(row,val))
   if row == 0 || row == -1
     # Objective row
     error("Encountered objective row $rowname in RANGES section")
@@ -668,7 +670,6 @@ function read_ranges_line!(qps::QPSData, card::MPSCard)
     # This row was not declared
     error("Unknown row $rowname.")
   end
-
   return nothing
 end
 

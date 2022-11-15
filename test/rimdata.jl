@@ -68,6 +68,7 @@
 
         @test qp.lcon == [2.0, 3.9]
         @test qp.ucon == [3.1, 6.0]
+        @test qp.rngcon == [(1,1.1),(2,2.1)]
       end
 
       @testset "Bounds" begin

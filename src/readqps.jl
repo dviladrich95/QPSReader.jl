@@ -665,7 +665,6 @@ function read_ranges_line!(qps::QPSData, card::MPSCard)
     elseif rtype == RTYPE_GreaterThan
       qps.ucon[row] = qps.lcon[row] + abs(val)
     end
-    qps.rngcon[row] = val
   else
     # This row was not declared
     error("Unknown row $rowname.")

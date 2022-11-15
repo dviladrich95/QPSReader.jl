@@ -72,6 +72,8 @@ mutable struct QPSData
 
   lcon::Vector{Float64}            # constraints lower bounds
   ucon::Vector{Float64}            # constraints upper bounds
+  rngcon::Dict{String, Int}        # range constraints dictionary
+
   lvar::Vector{Float64}            # variables lower bounds
   uvar::Vector{Float64}            # variables upper bounds
 
@@ -110,6 +112,7 @@ mutable struct QPSData
     Int[],
     Int[],
     Float64[],
+    Dict{String, Float64}(),
     Float64[],
     Float64[],
     Float64[],
@@ -660,6 +663,7 @@ function read_ranges_line!(qps::QPSData, card::MPSCard)
     elseif rtype == RTYPE_GreaterThan
       qps.ucon[row] = qps.lcon[row] + abs(val)
     end
+    qps.rngcon[row] = val
   else
     # This row was not declared
     error("Unknown row $rowname.")
